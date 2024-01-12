@@ -10,7 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
-    "type": "git"
+    "type": "git",
+    "url": "ttps://github.com/zzzgit/mura.git"
   },
   "author": "me",
   "license": "ISC",
