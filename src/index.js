@@ -37,9 +37,8 @@ program
 			pathName = options.path
 		}
 		if(!pathName){
-			console.error('no data source specified')
-			// how to show help for mura config?
-			console.log(program.helpInformation())
+			console.error('no data source specified, please set it by "mura config"')
+			console.log(config_cmd.helpInformation())
 			return null
 		}
 		if(!pathName.startsWith('/')){
@@ -61,7 +60,7 @@ program.command('table')
 		console.log('js:\n', result[1])
 	})
 
-program.command('config')
+const config_cmd = program.command('config')
 	.description('configure key-value pair in package.json')
 	.argument('[key]', 'the key to set or get')
 	.argument('[value]', 'the value to set.')
