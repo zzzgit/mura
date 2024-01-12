@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ttps://github.com/zzzgit/mura.git"
+    "url": "git@github.com:zzzgit/mura.git"
   },
   "author": "me",
   "license": "ISC",
