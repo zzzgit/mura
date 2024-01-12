@@ -1,0 +1,32 @@
+{
+  "name": "mura",
+  "version": "1.0.0",
+  "description": "none",
+  "type": "module",
+  "bin": {
+    "mura": "./src/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "author": "me",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^11.1.0",
+    "samael": "^3.0.4"
+  },
+  "devDependencies": {
+    "@stylistic/eslint-plugin-js": "^1.5.3",
+    "eslint": "^8.56.0",
+    "eslint-config-janus": "^2.0.1",
+    "eslint-plugin-array-func": "^4.0.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-unicorn": "^50.0.1"
+  },
+  "mura": {
+    "formData": "./tmpl/formdata.js"
+  }
+}
