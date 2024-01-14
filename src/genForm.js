@@ -1,12 +1,12 @@
 import formItem from './genFormitem.js'
-import parseFormStr from './parseFormStr.js'
+import parseFormItemStr from './parseFormItemStr.js'
 
 const indent = (str)=>{
 	return str.split('\n').map(line=>'\t' + line).join('\n')
 }
 
-const form = (formStr, nama)=>{
-	const fields_arr = parseFormStr (formStr)
+const form = (fieldsStr_arr, nama, isLoose)=>{
+	const fields_arr = fieldsStr_arr.map(fieldStr=>parseFormItemStr(fieldStr, isLoose))
 	const ref = nama ? nama + 'FormRef' : 'searchFormRef'
 	const model = nama ? nama + 'FormModel' : 'searchFormModel'
 	const rules = nama ? nama + 'ValidationRules' : 'validationRules'
@@ -18,7 +18,7 @@ const form = (formStr, nama)=>{
 	const tmpl =
 `<b-section bordered>
 <b-form ref="${ref}" :model="${model}" :rules="${rules}">
-${fields_arr.map(field=>indent(formItem(field, model))).join('\n')}
+${fields_arr.map(field=>indent(formItem(field, model, isLoose))).join('\n')}
 <b-button-group-search @click="${clickFunc}" />
 </b-form>
 </b-section>
@@ -35,7 +35,7 @@ export default {
 		const smooth = inject('smooth')
 		const ${model} = ref({
 			${fields_arr.map(field=>{
-		return `${field.name}: null `
+		return `${ (field).name}: null `
 	})}
 		})
 		const ${ref} = ref(null)

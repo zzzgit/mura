@@ -3,7 +3,8 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { program } from 'commander'
-import { form, table } from './engine.js'
+import { form, table, cform } from './engine.js'
+import parseFormStr from './parseFormStr.js'
 import { createRequire } from 'node:module'
 import { readFromFile, writeToFile } from 'samael'
 
@@ -20,32 +21,55 @@ const ensureJson = (json)=>{
 		json[muraKey] = {}
 	}
 }
+const getDataModule = async(options)=>{
+	let pathName = pjson[muraKey]?.formData
+	if(process.env.mura_form_data){
+		pathName = process.env.mura_form_data
+	}
+	if(options.path){
+		pathName = options.path
+	}
+	if(!pathName){
+		console.error('no data source specified, please set it by "mura config"')
+		console.log(config_cmd.helpInformation())
+		return null
+	}
+	if(!pathName.startsWith('/')){
+		pathName = path.resolve(process.cwd(), pathName)
+	}
+	const module = await import(pathName)
+	return module.default
+}
 
 program.name('mura').version(pjson.version, '-v, --version', 'output the current version')
 
 program
 	.command('form')
-	.description('generate form from json data')
+	.description('generate form from raw data')
 	.option('-p, --path <string>', 'the path to the formData.js file')
+	.option('-l, --loose', 'loose mode, no need to specify the type of the form item', true)
 	.argument('[name]', 'the of the form')
 	.action(async(name, options) => {
-		let pathName = pjson[muraKey]?.formData
-		if(process.env.mura_form_data){
-			pathName = process.env.mura_form_data
-		}
-		if(options.path){
-			pathName = options.path
-		}
-		if(!pathName){
-			console.error('no data source specified, please set it by "mura config"')
-			console.log(config_cmd.helpInformation())
+		const module = await getDataModule(options)
+		if(!module){
 			return null
 		}
-		if(!pathName.startsWith('/')){
-			pathName = path.resolve(process.cwd(), pathName)
+		const result = form(parseFormStr(module), name, options.loose)
+		console.log('html:\n', result[0])
+		console.log('js:\n', result[1])
+	})
+program
+	.command('cform')
+	.description('generate cform from raw data')
+	.option('-p, --path <string>', 'the path to the cformData.js file')
+	.option('-l, --loose', 'loose mode, no need to specify the type of the form item', true)
+	.argument('[name]', 'the of the form')
+	.action(async(name, options) => {
+		const module = await getDataModule(options)
+		if(!module){
+			return null
 		}
-		const module = await import(pathName)
-		const result = form(module.default, name)
+		const result = cform(parseFormStr(module), name, options.loose)
 		console.log('html:\n', result[0])
 		console.log('js:\n', result[1])
 	})
