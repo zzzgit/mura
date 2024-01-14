@@ -1,5 +1,10 @@
 const formItem = (field, modelName, isLoose)=>{
 	let control = null
+	if(field.name === '數據'){
+		field.type = 'w:data'
+	}else if(field.name === '日期'){
+		field.type = 'r'
+	}
 	if (!field.type){
 		field.type = 'text'
 	}
