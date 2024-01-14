@@ -1,4 +1,7 @@
-const formItem = (field, modelName)=>{
+import parseFormItemStr from './parseFormItemStr'
+
+const formItem = (fieldStr, modelName)=>{
+	const field = parseFormItemStr(fieldStr)
 	let control = null
 	if (!field.type){
 		field.type = 'text'
