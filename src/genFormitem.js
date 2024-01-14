@@ -1,18 +1,20 @@
 const formItem = (field, modelName, isLoose)=>{
+	console.log(222, field)
 	let control = null
-	if(field.name === '數據'){
-		field.type = 'w:data'
-	}else if(field.name === '日期'){
-		field.type = 'r'
-	}
 	if (!field.type){
-		field.type = 'text'
+		if(field.name === '數據'){
+			field.type = 'w:data'
+		}else if(field.name === '日期'){
+			field.type = 'r'
+		}else{
+			field.type = 'input'
+		}
 	}
-	if(field.type === 'select' || field.type === 's'){
+	if(['select', 's'].find((item)=>item === field.type)){
 		control = `<b-select v-model:value="${modelName}.${field.name}" addon-before="${field.label}"></b-select>`
-	}else if (field.type === 'range' || field.type === 'r'){
+	}else if (['range', 'r'].find((item)=>item === field.type)){
 		control = `<b-range-picker v-model:start-time="${modelName}.${field.start}" v-model:end-time="${modelName}.${field.end}" addon-before="${field.label}" />`
-	}else if (field.type.includes('wild:') || field.type.includes('w:')){
+	}else if (['wild:', 'w:'].find((item)=> field.type.includes(item))){
 		const forType = field.type.split(':')[1]
 		const label = field.label
 		if(!label){
@@ -21,6 +23,7 @@ const formItem = (field, modelName, isLoose)=>{
 		}
 		control = `<b-select-wild for="${forType}" v-model:value="${modelName}.${field.name}" addon-before="${label}"></b-select-wild>`
 	} else {
+		// report un-recoginized type first
 		control = `<b-input v-model:value="${modelName}.${field.name}" addon-before="${field.label}"></b-input>`
 	}
 	const tmpl =
