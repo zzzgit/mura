@@ -1,6 +1,6 @@
 const parse = (raw) => {
 	raw = raw.trim()
-	const isMultiLine = raw.includes('\n').length
+	const isMultiLine = raw.includes('\n')
 	if(isMultiLine){
 		return raw.split('\n').map(item=>{
 			return item.trim()
