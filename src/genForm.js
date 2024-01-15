@@ -27,7 +27,7 @@ ${fields_arr.map(field=>indent(formItem(field, model, isLoose))).join('\n')}
 `
 <script>
 import { ref,onMounted,inject } from 'vue'
-import { xxx } from '../../js/api.js'
+${isLoose && '//' }import { xxx } from '../../js/api.js'
 import { usePager } from '../../composable/pager'
 
 export default {
@@ -46,11 +46,11 @@ export default {
 		const ${fetchFunc} = ()=>{
 			${ref}.value.validate().then(()=>{
 				${isLoading}.value = true
-				return xxx(${model}.value, ${pager}.value)
+				${isLoose && '//' }return xxx(${model}.value, ${pager}.value)
 			}).then((data)=>{
-				${pager}.value.current = data.current
-				${pager}.value.total = data.total
-				${data}.value = data.list
+				${isLoose && '//' }${pager}.value.current = data.current
+				${isLoose && '//' }${pager}.value.total = data.total
+				${isLoose && '//' }${data}.value = data.list
 			}).catch((err)=>{
 				smooth(err)
 			}).finally(()=>{
