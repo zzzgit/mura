@@ -31,6 +31,7 @@ const getDataModule = async(options)=>{
 	}
 	if(!pathName){
 		console.error('no data source specified, please set it by "mura config"')
+		console.error('either run "mura config" to set it or pass the data by "-d" option')
 		console.log(config_cmd.helpInformation())
 		return null
 	}
@@ -48,13 +49,14 @@ program
 	.description('generate form from raw data')
 	.option('-p, --path <string>', 'the path to the formData.js file')
 	.option('-l, --loose', 'loose mode, no need to specify the type of the form item', true)
-	.argument('[name]', 'the of the form')
+	.option('-d, --data <string>', 'the data to be filled in the form')
+	.argument('[name]', 'the name of the form')
 	.action(async(name, options) => {
-		const module = await getDataModule(options)
-		if(!module){
+		const data = options.data ? parseFormStr(options.data) : await getDataModule(options)
+		if(!data){
 			return null
 		}
-		const result = form(parseFormStr(module), name, options.loose)
+		const result = form(parseFormStr(data), name, options.loose)
 		console.log('html:\n', result[0])
 		console.log('js:\n', result[1])
 	})
@@ -63,13 +65,14 @@ program
 	.description('generate cform from raw data')
 	.option('-p, --path <string>', 'the path to the cformData.js file')
 	.option('-l, --loose', 'loose mode, no need to specify the type of the form item', true)
-	.argument('[name]', 'the of the form')
+	.option('-d, --data <string>', 'the data to be filled in the form')
+	.argument('[name]', 'the name of the form')
 	.action(async(name, options) => {
-		const module = await getDataModule(options)
-		if(!module){
+		const data = options.data ? parseFormStr(options.data) : await getDataModule(options)
+		if(!data){
 			return null
 		}
-		const result = cform(parseFormStr(module), name, options.loose)
+		const result = cform(parseFormStr(data), name, options.loose)
 		console.log('html:\n', result[0])
 		console.log('js:\n', result[1])
 	})
@@ -77,7 +80,8 @@ program
 program.command('table')
 	.description('generate table from json data')
 	.option('-p, --path <string>', 'the path to the tableData.js file')
-	.argument('[name]', 'the of the table')
+	.option('-d, --data <string>', 'the data to be filled in the table')
+	.argument('[name]', 'the name of the table')
 	.action((name, options) => {
 		const result = table([], name)
 		console.log('html:\n', result[0])

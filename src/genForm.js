@@ -23,6 +23,15 @@ ${fields_arr.map(field=>indent(formItem(field, model, isLoose))).join('\n')}
 </b-form>
 </b-section>
 `
+	const genModel = (isLoose)=>{
+		if(isLoose){
+			return ' '
+		}
+		return fields_arr.map(field=>{
+			return `${ (field).name}: null `
+		})
+	}
+
 	const js =
 `
 <script>
@@ -34,9 +43,7 @@ export default {
 	setup(){
 		const smooth = inject('smooth')
 		const ${model} = ref({
-			${fields_arr.map(field=>{
-		return `${ (field).name}: null `
-	})}
+			${genModel(isLoose)}
 		})
 		const ${ref} = ref(null)
 		const ${isLoading} = ref(false)

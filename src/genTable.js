@@ -13,7 +13,7 @@ const table = (columnArr, nama)=>{
 				:pagination="${pager}"
 				@change="${change_cb}"
 			>
-				<template #title></template>
+				<!-- <template #title /> -->
 			</b-table>
 		</b-section>
 `
@@ -21,7 +21,7 @@ const table = (columnArr, nama)=>{
 `
 
 
-const ${columns} = []
+const ${columns} = ref([])
 const ${change_cb} = (pagination, filters, sorter) => {}
 
 `
